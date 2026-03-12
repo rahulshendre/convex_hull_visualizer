@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convex Hull Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Design and Analysis of Algorithms</p>
+        <h1>Convex Hull Algorithm Visualizer</h1>
+        <p class="subtitle">
+          Add points, generate datasets, and watch Graham Scan, Jarvis March, QuickHull, and Brute Force build the convex hull step by step.
+        </p>
+      </div>
+      <div class="stats-card">
+        <div class="stat">
+          <span class="stat-label">Points</span>
+          <span id="pointCount" class="stat-value">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Execution Time</span>
+          <span id="executionTime" class="stat-value">0 ms</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-grid">
+      <aside class="panel controls-panel">
+        <h2>Controls</h2>
+        <p class="panel-note">Click anywhere on the canvas to add points manually.</p>
+
+        <label class="control-group">
+          <span>Choose Algorithm</span>
+          <select id="algorithmSelect">
+            <option value="graham">Graham Scan</option>
+            <option value="jarvis">Jarvis March</option>
+            <option value="quickhull">QuickHull</option>
+            <option value="bruteforce">Brute Force</option>
+          </select>
+        </label>
+
+        <label class="control-group">
+          <span>Random Points</span>
+          <div class="input-row">
+            <input id="randomCount" type="number" min="3" max="150" value="20">
+            <button id="generateBtn" type="button">Generate Random</button>
+          </div>
+        </label>
+
+        <label class="control-group">
+          <span>Animation Speed</span>
+          <div class="slider-row">
+            <input id="speedSlider" type="range" min="50" max="1200" step="50" value="450">
+            <span id="speedValue">450 ms</span>
+          </div>
+        </label>
+
+        <label class="checkbox-row">
+          <input id="animateToggle" type="checkbox" checked>
+          <span>Step-by-step animation</span>
+        </label>
+
+        <div class="button-grid">
+          <button id="runBtn" type="button" class="primary">Run Algorithm</button>
+          <button id="pauseBtn" type="button">Pause</button>
+          <button id="resumeBtn" type="button">Resume</button>
+          <button id="fastForwardBtn" type="button">Fast Forward</button>
+          <button id="resetBtn" type="button">Reset Animation</button>
+          <button id="clearBtn" type="button" class="danger">Clear Canvas</button>
+        </div>
+
+        <div class="legend">
+          <h3>Visualization Colors</h3>
+          <div class="legend-item"><span class="swatch points"></span>Normal points</div>
+          <div class="legend-item"><span class="swatch edge"></span>Current edge</div>
+          <div class="legend-item"><span class="swatch checking"></span>Checking points</div>
+          <div class="legend-item"><span class="swatch hull"></span>Final hull</div>
+        </div>
+      </aside>
+
+      <section class="panel canvas-panel">
+        <div class="canvas-header">
+          <div>
+            <h2>Interactive Canvas</h2>
+            <p>Click to add points, then run the selected algorithm.</p>
+          </div>
+          <div id="statusBadge" class="status-badge idle">Ready</div>
+        </div>
+        <div class="canvas-frame">
+          <canvas id="canvas" width="900" height="560" aria-label="Convex hull visualization canvas"></canvas>
+        </div>
+      </section>
+
+      <aside class="panel info-panel">
+        <section class="info-block">
+          <h2>Algorithm Details</h2>
+          <p id="algorithmDescription"></p>
+          <div class="meta-line">
+            <span class="meta-label">Time Complexity</span>
+            <span id="timeComplexity" class="meta-value"></span>
+          </div>
+        </section>
+
+        <section class="info-block">
+          <h2>Current Step</h2>
+          <p id="stepDescription">Add points to begin.</p>
+        </section>
+
+        <section class="info-block">
+          <h2>Hull Points</h2>
+          <div id="hullPoints" class="coordinate-list">No hull computed yet.</div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="algorithms/grahamScan.js"></script>
+  <script src="algorithms/jarvisMarch.js"></script>
+  <script src="algorithms/quickHull.js"></script>
+  <script src="algorithms/bruteForce.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
