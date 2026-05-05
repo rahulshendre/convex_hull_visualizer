@@ -4,13 +4,10 @@ This project is a small web app that helps you **see how different convex hull a
 
 ### How to Run
 - **Open the app**: Just open `index.html` in any modern browser (no server or install needed).
-- **Add points**: Click on the canvas to add points, or use the **Random Points** controls.
-- **Choose an algorithm**: Pick one from the dropdown:
-  - **Graham Scan**
-  - **Jarvis March**
-  - **QuickHull**
-  - **Brute Force**
-- **Run**: Click **Run Algorithm** to start the visualization. Use the pause, resume, fast‑forward, and reset buttons to control the animation.
+- **Default (single view)**: One large canvas; one **Choose algorithm** dropdown. Click the canvas or **Random Points**, then **Run Algorithm**.
+- **Dual view**: Turn on **Dual view** in **Controls** for two side‑by‑side panes, two algorithm dropdowns, and parallel animations on the same points. Switching layouts **remaps** existing points to fit the active canvas size (margins preserved).
+- **Run**: In dual view, **Run Algorithm** drives **both** panes. Pause / resume / fast‑forward applies to both animation loops.
+- **Asymptotic chart**: The **Big‑O intuition** section plots idealized \(n \log n\), \(n^2\), and \(n^3\) shapes (normalized, **not** stopwatch timings) plus a **complexity table** for all four hull algorithms.
 
 ### Files Overview
 - **index.html**: Main page structure and controls for the visualizer.
@@ -21,6 +18,10 @@ This project is a small web app that helps you **see how different convex hull a
   - `jarvisMarch.js`
   - `quickHull.js`
   - `bruteForce.js`
+
+### Dual view & asymptotic chart
+- **Dual view**: Compare **two** hull algorithms visually on identical input.
+- **Growth chart**: Plots **functions** of \(n\) (e.g. \(n \log n\), \(n^2\), \(n^3\)) scaled for comparison for Big‑O / Big‑Θ style discussion (not benchmarking).
 
 ### Algorithms (Simple Explanations)
 - **Graham Scan (`grahamScan.js`)**  

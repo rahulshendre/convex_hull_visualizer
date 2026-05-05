@@ -6,14 +6,14 @@
   <title>Convex Hull Algorithm Visualizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="view-single">
   <div class="page-shell">
     <header class="hero">
       <div>
         <p class="eyebrow">Design and Analysis of Algorithms</p>
         <h1>Convex Hull Algorithm Visualizer</h1>
         <p class="subtitle">
-          Add points, generate datasets, and watch Graham Scan, Jarvis March, QuickHull, and Brute Force build the convex hull step by step.
+          Run one algorithm on a large canvas by default, or turn on dual view to compare two algorithms side by side. The bottom section summarizes Big‑O complexities and sketches idealized growth curves.
         </p>
       </div>
       <div class="stats-card">
@@ -21,9 +21,17 @@
           <span class="stat-label">Points</span>
           <span id="pointCount" class="stat-value">0</span>
         </div>
-        <div class="stat">
-          <span class="stat-label">Execution Time</span>
-          <span id="executionTime" class="stat-value">0 ms</span>
+        <div class="stat stat-exec-single">
+          <span class="stat-label">Execution time</span>
+          <span id="executionTimeSingle" class="stat-value">0 ms</span>
+        </div>
+        <div class="stat stat-exec-dual">
+          <span class="stat-label">Time (left)</span>
+          <span id="executionTimeLeft" class="stat-value">0 ms</span>
+        </div>
+        <div class="stat stat-exec-dual">
+          <span class="stat-label">Time (right)</span>
+          <span id="executionTimeRight" class="stat-value">0 ms</span>
         </div>
       </div>
     </header>
@@ -31,13 +39,28 @@
     <main class="app-grid">
       <aside class="panel controls-panel">
         <h2>Controls</h2>
-        <p class="panel-note">Click anywhere on the canvas to add points manually.</p>
+        <p id="controlsHint" class="panel-note">Click the canvas below to add points.</p>
+
+        <div class="control-group toggle-row">
+          <button id="dualViewToggle" type="button" aria-pressed="false">Dual view: off</button>
+          <span class="toggle-help muted">Turn on to compare two algorithms on two panes.</span>
+        </div>
 
         <label class="control-group">
-          <span>Choose Algorithm</span>
-          <select id="algorithmSelect">
-            <option value="graham">Graham Scan</option>
+          <span id="algoLeftLabel">Choose algorithm</span>
+          <select id="algorithmSelectLeft">
+            <option value="graham" selected>Graham Scan</option>
             <option value="jarvis">Jarvis March</option>
+            <option value="quickhull">QuickHull</option>
+            <option value="bruteforce">Brute Force</option>
+          </select>
+        </label>
+
+        <label class="control-group algo-right-wrap">
+          <span>Right pane algorithm</span>
+          <select id="algorithmSelectRight">
+            <option value="graham">Graham Scan</option>
+            <option value="jarvis" selected>Jarvis March</option>
             <option value="quickhull">QuickHull</option>
             <option value="bruteforce">Brute Force</option>
           </select>
@@ -85,37 +108,131 @@
       <section class="panel canvas-panel">
         <div class="canvas-header">
           <div>
-            <h2>Interactive Canvas</h2>
-            <p>Click to add points, then run the selected algorithm.</p>
+            <h2 id="canvasPanelTitle">Interactive canvas</h2>
+            <p id="canvasPanelLead">Pick an algorithm and run - the canvas shows steps and the final hull.</p>
           </div>
           <div id="statusBadge" class="status-badge idle">Ready</div>
         </div>
-        <div class="canvas-frame">
-          <canvas id="canvas" width="900" height="560" aria-label="Convex hull visualization canvas"></canvas>
+        <div class="single-canvas-shell">
+          <div class="canvas-frame">
+            <canvas id="canvasSingle" width="900" height="560" aria-label="Convex hull visualization main canvas"></canvas>
+          </div>
+        </div>
+        <div class="dual-canvas-frame">
+          <div class="canvas-slot">
+            <h3 id="paneTitleLeft" class="pane-title">Left</h3>
+            <div class="canvas-frame">
+              <canvas id="canvasLeft" width="430" height="520" aria-label="Convex hull visualization left pane"></canvas>
+            </div>
+          </div>
+          <div class="canvas-slot">
+            <h3 id="paneTitleRight" class="pane-title">Right</h3>
+            <div class="canvas-frame">
+              <canvas id="canvasRight" width="430" height="520" aria-label="Convex hull visualization right pane"></canvas>
+            </div>
+          </div>
         </div>
       </section>
 
       <aside class="panel info-panel">
         <section class="info-block">
           <h2>Algorithm Details</h2>
-          <p id="algorithmDescription"></p>
+          <p id="algorithmDescriptionLeft" class="algorithm-blurb"></p>
           <div class="meta-line">
-            <span class="meta-label">Time Complexity</span>
-            <span id="timeComplexity" class="meta-value"></span>
+            <span id="metaLabelLeft" class="meta-label">Time complexity</span>
+            <span id="timeComplexityLeft" class="meta-value"></span>
+          </div>
+          <div class="algo-dual-extra">
+            <p id="algorithmDescriptionRight" class="algorithm-blurb"></p>
+            <div class="meta-line">
+              <span class="meta-label">Right complexity</span>
+              <span id="timeComplexityRight" class="meta-value"></span>
+            </div>
           </div>
         </section>
 
         <section class="info-block">
           <h2>Current Step</h2>
-          <p id="stepDescription">Add points to begin.</p>
+          <p class="step-label step-dual-only">Left pane</p>
+          <p id="stepDescriptionLeft" class="step-text">-</p>
+          <p class="step-label step-dual-only">Right pane</p>
+          <p id="stepDescriptionRight" class="step-text step-dual-only">-</p>
         </section>
 
         <section class="info-block">
           <h2>Hull Points</h2>
-          <div id="hullPoints" class="coordinate-list">No hull computed yet.</div>
+          <p class="step-label step-dual-only">Left hull</p>
+          <div id="hullPointsLeft" class="coordinate-list hull-split">No hull computed yet.</div>
+          <p class="step-label step-dual-only">Right hull</p>
+          <div id="hullPointsRight" class="coordinate-list hull-split hull-dual-extra">No hull computed yet.</div>
         </section>
       </aside>
     </main>
+
+    <section class="panel benchmark-panel" aria-labelledby="theoryHeading">
+      <h2 id="theoryHeading">Asymptotic growth (Big‑O intuition)</h2>
+      <p class="benchmark-lead muted">
+        Compare how work grows with input size&nbsp;<code>n</code> using asymptotic growth (Big‑O / Big‑Θ style). Curves plot <strong>n&nbsp;log<sub>2</sub>&nbsp;n</strong>, <strong>n<sup>2</sup></strong>, and <strong>n<sup>3</sup></strong> only - not stopwatch time. Constants and lower terms are omitted. Each curve is <strong>normalized</strong> to height&nbsp;1 so they fit one plot; the <em>y</em> axis is not seconds - only relative shape vs&nbsp;<code>n</code>.
+      </p>
+
+      <table class="complexity-table" aria-label="Stated time complexities for each hull algorithm">
+        <thead>
+          <tr>
+            <th scope="col">Algorithm</th>
+            <th scope="col">Time complexity (as in analysis)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Graham Scan</td>
+            <td>O(n log n)</td>
+          </tr>
+          <tr>
+            <td>QuickHull</td>
+            <td>Average O(n log n), worst O(n<sup>2</sup>)</td>
+          </tr>
+          <tr>
+            <td>Jarvis March</td>
+            <td>O(nh); worst O(n<sup>2</sup>) when h ≈ n</td>
+          </tr>
+          <tr>
+            <td>Brute force</td>
+            <td>O(n<sup>3</sup>)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="benchmark-controls theory-controls">
+        <label class="control-inline">
+          <span><code>n</code> min</span>
+          <input id="theoryNMin" type="number" min="2" max="500" value="5">
+        </label>
+        <label class="control-inline">
+          <span><code>n</code> max</span>
+          <input id="theoryNMax" type="number" min="3" max="500" value="60">
+        </label>
+        <label class="control-inline">
+          <span>Sample step</span>
+          <input id="theoryStep" type="number" min="1" max="50" value="2">
+        </label>
+      </div>
+      <fieldset class="benchmark-fieldset">
+        <legend>Growth functions to draw</legend>
+        <label class="radio-inline bench-check">
+          <input type="checkbox" id="theoryCurveNLogN" checked> <em>n</em> log<sub>2</sub> <em>n</em> - Graham; QuickHull average
+        </label>
+        <label class="radio-inline bench-check">
+          <input type="checkbox" id="theoryCurveNSq" checked> <em>n</em><sup>2</sup> - Jarvis worst (<em>h</em> ≈ <em>n</em>); QuickHull worst
+        </label>
+        <label class="radio-inline bench-check">
+          <input type="checkbox" id="theoryCurveNCubed" checked> <em>n</em><sup>3</sup> - Brute force
+        </label>
+      </fieldset>
+      <p class="theory-chart-note muted">Chart updates when you change the numbers or tick boxes.</p>
+      <div class="chart-frame">
+        <canvas id="complexityChart" aria-label="Theoretical normalized growth curves versus input size n"></canvas>
+      </div>
+    </section>
   </div>
 
   <script src="algorithms/grahamScan.js"></script>

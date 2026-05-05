@@ -30,6 +30,9 @@ body {
   width: min(1400px, calc(100% - 32px));
   margin: 0 auto;
   padding: 28px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .hero {
@@ -68,6 +71,17 @@ h1 {
   margin-bottom: 0;
 }
 
+.muted {
+  color: var(--muted);
+}
+
+code {
+  font-size: 0.9em;
+  background: rgba(191, 91, 23, 0.1);
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+}
+
 .stats-card,
 .panel {
   backdrop-filter: blur(12px);
@@ -82,6 +96,14 @@ h1 {
   padding: 18px;
   display: grid;
   gap: 14px;
+}
+
+body.view-single .stat-exec-dual {
+  display: none;
+}
+
+body.view-dual .stat-exec-single {
+  display: none;
 }
 
 .stat {
@@ -289,6 +311,229 @@ button.danger {
   border: 1px solid rgba(54, 34, 12, 0.12);
 }
 
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toggle-row button {
+  width: auto;
+  white-space: nowrap;
+}
+
+.toggle-help {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  flex: 1;
+  min-width: 140px;
+}
+
+#dualViewToggle[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff7f0;
+}
+
+#dualViewToggle[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+body.view-single .algo-right-wrap {
+  display: none;
+}
+
+body.view-single .algo-dual-extra,
+body.view-single .step-dual-only,
+body.view-single .hull-dual-extra {
+  display: none !important;
+}
+
+body.view-dual .single-canvas-shell {
+  display: none;
+}
+
+body.view-single .dual-canvas-frame {
+  display: none;
+}
+
+.single-canvas-shell .canvas-frame {
+  width: 100%;
+}
+
+.dual-canvas-frame {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.canvas-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pane-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.algorithm-blurb {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.algorithm-blurb + .meta-line + .algorithm-blurb {
+  margin-top: 14px;
+}
+
+.step-label {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.step-text {
+  margin: 0 0 12px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.hull-split {
+  max-height: 140px;
+  margin-bottom: 12px;
+}
+
+.benchmark-panel {
+  padding: 22px;
+}
+
+.benchmark-lead {
+  margin-top: 0;
+  margin-bottom: 18px;
+  line-height: 1.55;
+  max-width: 900px;
+}
+
+.benchmark-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.control-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.control-inline input[type="number"] {
+  width: 88px;
+  min-width: 0;
+}
+
+.benchmark-fieldset {
+  border: 1px solid rgba(71, 52, 28, 0.15);
+  border-radius: 14px;
+  padding: 12px 14px 14px;
+  margin: 0 0 14px;
+}
+
+.benchmark-fieldset legend {
+  padding: 0 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.radio-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 18px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.benchmark-check input {
+  cursor: pointer;
+}
+
+.benchmark-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.benchmark-actions .primary {
+  width: auto;
+}
+
+.benchmark-status {
+  font-size: 0.9rem;
+}
+
+.chart-frame {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(54, 34, 12, 0.12);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85));
+  width: 100%;
+  aspect-ratio: 840 / 320;
+}
+
+.chart-frame canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  vertical-align: top;
+}
+
+.complexity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 18px;
+  font-size: 0.92rem;
+}
+
+.complexity-table th,
+.complexity-table td {
+  border: 1px solid rgba(71, 52, 28, 0.15);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.complexity-table th {
+  background: rgba(191, 91, 23, 0.08);
+  font-weight: 700;
+}
+
+.theory-chart-note {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+}
+
+.theory-controls {
+  margin-bottom: 12px;
+}
+
 canvas {
   display: block;
   width: 100%;
@@ -342,6 +587,10 @@ canvas {
 
   .stats-card {
     min-width: 0;
+  }
+
+  .dual-canvas-frame {
+    grid-template-columns: 1fr;
   }
 }
 
